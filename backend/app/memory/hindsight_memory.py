@@ -8,7 +8,11 @@ logger = logging.getLogger(__name__)
 try:
     from hindsight_client import Hindsight
     HINDSIGHT_API_URL = os.getenv("HINDSIGHT_API_URL", "http://localhost:8888")
-    hindsight_client = Hindsight(base_url=HINDSIGHT_API_URL)
+    HINDSIGHT_API_KEY = os.getenv("HINDSIGHT_API_KEY")
+    try:
+        hindsight_client = Hindsight(base_url=HINDSIGHT_API_URL, api_key=HINDSIGHT_API_KEY)
+    except TypeError:
+        hindsight_client = Hindsight(base_url=HINDSIGHT_API_URL)
 except ImportError:
     hindsight_client = None
     logger.warning("hindsight-client SDK not found. Falling back to local mock memory store.")
