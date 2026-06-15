@@ -2,8 +2,10 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
+
 class OrderResponse(BaseModel):
     order_id: int
+    user_id: int
     product_name: str
     status: str
     delivery_date: Optional[datetime] = None

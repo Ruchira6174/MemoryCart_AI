@@ -30,11 +30,13 @@ except ImportError:
 # Read database credentials with default fallback values
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "3306")
-DB_NAME = os.getenv("DB_NAME", "memorycart")
+# Default DB_NAME should match the actual MySQL database used in production
+DB_NAME = os.getenv("DB_NAME", "memorycart_ai")
 DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "Ruchira")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 
 # Construct the SQLAlchemy database URL using mysql+pymysql
+# Build the SQLAlchemy database URL. Keep credentials in env for flexibility.
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 # Create SQLAlchemy engine with production-ready connection pooling configurations

@@ -1,12 +1,24 @@
 fastapi
-uvicorn
+uvicorn[standard]
 sqlalchemy
 pymysql
 python-dotenv
+
+# Groq LLM
+groq
+
+# RAG pipeline
 langchain
 langchain-community
-langchain-groq
+langchain-text-splitters
+langchain-huggingface
+langchain-chroma
 chromadb
 pypdf
+sentence-transformers
+
+# Memory SDK
 hindsight-client
-groq
+
+# PDF generation (for sample data scripts)
+reportlab

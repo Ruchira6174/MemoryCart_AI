@@ -1,0 +1,1 @@
+# MemoryCart AI - app package
