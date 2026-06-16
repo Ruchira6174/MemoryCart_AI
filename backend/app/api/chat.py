@@ -20,7 +20,7 @@ def chat_endpoint(request: ChatRequest, db: Session = Depends(get_db)):
     """
     try:
         response_text = AgentService.process_message(
-            db=db, 
+            db=db,
             user_id=request.user_id, 
             message=request.message
         )
@@ -29,13 +29,28 @@ def chat_endpoint(request: ChatRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Failed to process chat: {str(e)}")
 
 @router.get("/memory/{user_id}")
-def get_user_memory(user_id: int) -> Dict[str, Any]:
+def get_user_memory(user_id: int, db: Session = Depends(get_db)) -> Dict[str, Any]:
     """
     Retrieve the latest memories for a given user.
     """
     try:
+        # MemoryService.get_latest_memories returns data from Hindsight SDK
         memories = MemoryService.get_latest_memories(user_id=user_id, limit=5)
-        return {"user_id": user_id, "memories": memories}
+        # Format memory list for consistent response
+        mem_list = []
+        if memories:
+            if isinstance(memories, list):
+                for m in memories:
+                    if isinstance(m, dict):
+                        mem_list.append(m)
+                    else:
+                        # If it's an object with attributes
+                        mem_list.append({
+                            "summary": getattr(m, "summary", str(m)),
+                            "issue_type": getattr(m, "issue_type", "general"),
+                            "created_at": str(getattr(m, "created_at", ""))
+                        })
+        return {"user_id": user_id, "memories": mem_list}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to retrieve memory: {str(e)}")
 
